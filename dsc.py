@@ -17,8 +17,8 @@ class DeepSubspaceClustering:
         self.inputX = inputX
 
         if C == None:
-            C = getSparcityPrior(inputX)
-            self.C = tf.constant(C)
+            C = getSparcityPrior(inputX.T)
+        self.C = tf.constant(C)
 
         self.hidden_layers
         self.X = _add_noise(tf.placeholder(dtype=tf.float32, shape=[None, n_feat], name='X'))
