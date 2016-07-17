@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import tensorflow as tf
 import numpy as np
-from helpers import optimize
+from supporting_files.helpers import optimize
 
 def getSparcityPrior(inputX, C_init=None, lambda1=0.01, lambda2=10000, optimizer='Adam', epochs=10000, learning_rate=0.1, print_step=50):
     tf.reset_default_graph()
@@ -17,13 +17,13 @@ def getSparcityPrior(inputX, C_init=None, lambda1=0.01, lambda2=10000, optimizer
         C = tf.Variable(C_init, name='C')
 
     loss = X - tf.matmul(X, C)
-    loss = tf.reduce_sum(tf.square(loss))
+    loss = tf.reduce_mean(tf.square(loss))
 
     # Create sparseness in C
-    reg_lossC = tf.reduce_sum(abs(C))  # L1 loss for C
+    reg_lossC = tf.reduce_mean(abs(C))  # L1 loss for C
 
     # Force the entries in the diagonal of C to be zero
-    reg_lossD = tf.trace(tf.square(C))
+    reg_lossD = tf.trace(tf.square(C))/n_sample
 
     cost = loss + lambda1 * reg_lossC + lambda2 * reg_lossD
     optimizer = optimize(cost, learning_rate, optimizer)
