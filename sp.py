@@ -28,25 +28,27 @@ def getSparcityPrior(inputX, C_init=None, lambda1=0.01, lambda2=10000, optimizer
     cost = loss + lambda1 * reg_lossC + lambda2 * reg_lossD
     optimizer = optimize(cost, learning_rate, optimizer)
 
-    # global_step = tf.Variable(0, trainable=False)
-    # starter_learning_rate = learning_rate
-    # learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step,
-    #                                            100000, 0.96, staircase=True)
-    # # Passing global_step to minimize() will increment it at each step.
-    # learning_step = (
-    #     tf.GradientDescentOptimizer(learning_rate)
-    #     .minimize(...my loss..., global_step=global_step)
-    # )
-
+    saver = tf.train.Saver()
     # Optimizing the function
     with tf.Session() as sess:
         sess.run(tf.initialize_all_variables())
         print("Calculating C ...")
-        for i in xrange(epochs):
+        for i in xrange(1, epochs+1):
             sess.run(optimizer, feed_dict={X: inputX})
             loss = sess.run(cost, feed_dict={X: inputX})
             if i % print_step == 0:
                 print('epoch {0}: global loss = {1}'.format(i, loss))
-            C_val = sess.run(C)
+            if i % 50 == 0:
+                save_path = saver.save(sess, "./model_C_"+str(i)+".ckpt")
+                print("Model saved in file: %s" % save_path)
+
+        C_val = sess.run(C)
 
         return C_val
+        # Add ops to save and restore all the variables.
+
+
+  # Save the variables to disk.
+  
+
+        
