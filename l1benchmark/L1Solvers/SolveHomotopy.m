@@ -94,12 +94,18 @@ gamma_x = [];       % Primal support
 % Initial step
 Primal_constrk = -A'*b;
 
+disp(size(Primal_constrk))
+
 if isNonnegative
     [c i]  = min(Primal_constrk);
     c = max(-c, 0);
 else
     [c i] = max(abs(Primal_constrk));
+    disp(c)
+    disp(i)
 end
+
+disp(max(abs(Primal_constrk)))
 
 epsilon = c;
 nz_x = zeros(N,1);
