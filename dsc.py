@@ -1,4 +1,5 @@
 from sp import getSparcityPrior
+from sp_blitzl1 import sparseCoefRecovery
 import tensorflow as tf
 import numpy as np
 from supporting_files.nncomponents import *
@@ -25,7 +26,7 @@ class DeepSubspaceClustering:
 
         if C is None:
             # Transpose the matrix first, and get the whole matrix of C
-            self.inputC = getSparcityPrior(inputX.T, epochs=1000)
+            self.inputC = sparseCoefRecovery(inputX.T)
         else:
             self.inputC = C
 

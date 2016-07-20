@@ -17,6 +17,8 @@ def SolveHomotopy(A=None,b=None,*args,**kwargs):
     maxiter=100
     isNonnegative= False
     verbose= False
+    eps = numpy.finfo(float).eps
+
     xk_1=matlabarray([])
     STOPPING_TIME=- 2
     STOPPING_GROUND_TRUTH=- 1
@@ -110,8 +112,12 @@ def SolveHomotopy(A=None,b=None,*args,**kwargs):
 
         dk=A.T * Agdelx
         pk_temp=copy(Primal_constrk)
-        gammaL_temp=find(abs(abs(Primal_constrk) - epsilon) < min(epsilon,2 * eps))
-        pk_temp[gammaL_temp]=sign(Primal_constrk[gammaL_temp]) * epsilon
+        gammaL_temp=find(abs(abs(Primal_constrk) - epsilon) < numpy.min(epsilon,2 * eps))
+        print gammaL_temp
+        print pk_temp
+        print pk_temp[0][[1]]
+        print "Asdasdasd"
+        pk_temp[0][gammaL_temp]=sign(Primal_constrk[0][gammaL_temp]) * epsilon
         xk_temp=copy(x_k)
         xk_temp[abs_(x_k) < 2 * eps]=0
         i_delta,delta,out_x=update_primal(out_x,nargout=3)
